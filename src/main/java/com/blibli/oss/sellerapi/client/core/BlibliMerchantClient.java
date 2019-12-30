@@ -47,6 +47,22 @@ public class BlibliMerchantClient {
 
     return this.invokeWithBody(con, mapper.writeValueAsString(requestBody));
   }
+	
+  public String invokeRequest(String methodType, String apiUrl, Map<String, Object> params, Object requestBody,
+    ApiConfig config)
+    throws Exception {
+    ApiValidator.validateAPIConfig(config);
+    String requestId = UUID.randomUUID().toString();
+    generator.setMandatoryParam(params, config, requestId);
+    URL url = new URL(generator.buildReqParam(apiUrl, params));
+    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    generator.setMandatoryHeader(apiUrl, requestId, con, methodType, config, requestBody);
+    if (Constant.HTTP_GET.equals(methodType) || Constant.HTTP_DELETE.equals(methodType)) {
+      return this.invokeHttp(con);
+    } else {
+      return this.invokeWithBody(con, mapper.writeValueAsString(requestBody));
+    }
+  }
 
   public String requestToken(String apiUrl, TokenRequest req) throws IOException {
     ApiValidator.validateTokenRequest(req);
