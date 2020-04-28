@@ -32,12 +32,12 @@ public class SignatureGenerator {
 
   public void setMandatoryParam(Map<String, Object> params, ApiConfig config, String requestId) {
     if(params != null) {
-      params.put("channelId", config.getPlatformName().replaceAll(" ", "-").toLowerCase());
+      params.put("channelId", config.getPlatformName()
+          .replaceAll(" ", "-")
+          .toLowerCase());
       params.put("username", config.getMtaUsername());
       params.put("storeId", Constant.BLIBLI_STORE_ID);
-      if(params.get("requestId") == null) { 
-    	  params.put("requestId", requestId);
-      }
+      params.putIfAbsent("requestId", requestId);
       params.put("businessPartnerCode", config.getBusinessPartnerCode());
       params.put("merchantCode", config.getBusinessPartnerCode());
     }
@@ -45,10 +45,10 @@ public class SignatureGenerator {
 
   public void setMandatoryHeader(String apiUrl, String requestId, HttpURLConnection con,
       String methodType, ApiConfig config, Object requestBody)
-      throws NoSuchAlgorithmException, ProtocolException {
+      throws ProtocolException {
     Date date = new Date();
     String rawSignature = this.generateRawSignature(date, methodType, apiUrl, requestBody);
-    String signature = this.generateSignature(config.getSecretKey(), rawSignature);
+    String signature = this.generateSignature(config.getSignatureKey(), rawSignature);
 
     con.setRequestMethod(methodType);
     con.setConnectTimeout(config.getTimeoutMs());
@@ -63,6 +63,27 @@ public class SignatureGenerator {
     con.setRequestProperty("requestId", requestId);
     con.setRequestProperty("sessionId", requestId);
     con.setRequestProperty("username", config.getMtaUsername());
+  }
+
+  public void setMandatoryHeaderBasicAuth(String apiUrl, String requestId, HttpURLConnection con,
+      String methodType, ApiConfig config, Object requestBody) {
+    if (config.getSignatureKey() != null) {
+      Date date = new Date();
+      String rawSignature = this.generateRawSignature(date, methodType, apiUrl, requestBody);
+      String signature = this.generateSignature(config.getSignatureKey(), rawSignature);
+
+      con.setRequestProperty("Signature", signature);
+      con.setRequestProperty("Signature-Time", String.valueOf(date.getTime()));
+    }
+
+    String encodedValue = generateBasicAuthValue(config.getApiClientId(), config.getApiClientKey());
+    con.setRequestProperty("Authorization", "Basic " + encodedValue);
+    con.setRequestProperty("Content-Type", Constant.APPLICATION_JSON);
+    con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
+    con.setRequestProperty("requestId", requestId);
+    con.setRequestProperty("sessionId", requestId);
+    con.setRequestProperty("username", config.getMtaUsername());
+    con.setRequestProperty("Api-Seller-Key", config.getApiSellerKey());
   }
 
   public String buildReqParam(String url, Map<String, Object> params) {
@@ -100,18 +121,14 @@ public class SignatureGenerator {
     con.setConnectTimeout(timeout);
     con.setReadTimeout(timeout);
 
-    BASE64Encoder enc = new sun.misc.BASE64Encoder();
-    String userpassword = username + ":" + pwd;
-    String encodedAuthorization = enc.encode(userpassword.getBytes());
+    String encodedAuthorization = generateBasicAuthValue(username, pwd);
     con.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
     con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
   }
 
-  private String generateRawSignature(Date date, String methodType, String url, Object body)
-      throws NoSuchAlgorithmException {
+  private String generateRawSignature(Date date, String methodType, String url, Object body) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zz YYYY");
-    TimeZone tz = TimeZone.getTimeZone("Asia/Jakarta");
-    dateFormat.setTimeZone(tz);
+    dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
 
     String md5Body = "";
     if (body != null) {
@@ -126,8 +143,9 @@ public class SignatureGenerator {
     }
 
     StringBuilder result = new StringBuilder();
-    result.append(methodType).append("\n").append(md5Body).append("\n").append(contentType)
-        .append("\n").append(dateFormat.format(date)).append("\n").append(this.getUrlMetadata(url));
+    result.append(methodType).append("\n").append(md5Body).append("\n")
+        .append(contentType).append("\n").append(dateFormat.format(date)).append("\n")
+        .append(this.getUrlMetadata(url));
     return result.toString();
   }
 
@@ -137,8 +155,7 @@ public class SignatureGenerator {
       Mac mac = Mac.getInstance(this.HMACSHA256);
       mac.init(signingKey);
       byte[] rawHmac = mac.doFinal(data.getBytes(this.UTF8));
-      String result = new String(Base64.encodeBase64String(rawHmac));
-      return result;
+      return Base64.encodeBase64String(rawHmac);
     } catch (Exception e) {
       throw new IllegalArgumentException("Failed to generate API signature " + e.getMessage(), e);
     }
@@ -164,4 +181,9 @@ public class SignatureGenerator {
     }
   }
 
+  private String generateBasicAuthValue(String username, String password) {
+    BASE64Encoder enc = new BASE64Encoder();
+    String authValue = username + ":" + password;
+    return enc.encode(authValue.getBytes()).replaceAll("\\s", "");
+  }
 }

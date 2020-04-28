@@ -25,10 +25,25 @@ public class ApiValidator {
   
   public static void validateAPIConfig(ApiConfig config) {
     ApiValidator.validate(config.getToken(), "API client token");
-    ApiValidator.validate(config.getSecretKey(), "API secret key");
+    ApiValidator.validate(config.getSignatureKey(), "API secret key");
     ApiValidator.validate(config.getMtaUsername(), "MTA username");
     ApiValidator.validate(config.getBusinessPartnerCode(), "business partner code ");
     ApiValidator.validate(config.getPlatformName(), "platform name/channelId");
+
+    setTimeout(config);
+  }
+  
+  public static void validateAPIConfigBasicAuth(ApiConfig config) {
+    ApiValidator.validate(config.getApiClientId(), "api client id ");
+    ApiValidator.validate(config.getApiClientKey(), "api client key ");
+    ApiValidator.validate(config.getApiSellerKey(), "api seller key ");
+    ApiValidator.validate(config.getBusinessPartnerCode(), "business partner code ");
+    ApiValidator.validate(config.getPlatformName(), "platform name/channelId");
+    
+    setTimeout(config);
+  }
+  
+  private static void setTimeout(ApiConfig config) {
     if (config.getTimeoutMs() == null) {
       config.setTimeoutMs(Constant.DEFAULT_TIMEOUT);
     }
