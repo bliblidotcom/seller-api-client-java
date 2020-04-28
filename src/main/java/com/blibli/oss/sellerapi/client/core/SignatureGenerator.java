@@ -179,7 +179,7 @@ public class SignatureGenerator {
       if (url.contains("/mta")) {
         return url.replaceFirst("/mta", "/mtaapi");
       } else {
-        return "/api" + url;
+        return "/seller-api/api" + url;
       }
     } catch (Exception e) {
       throw new IllegalArgumentException("Your API pattern is wrong " + url, e);
