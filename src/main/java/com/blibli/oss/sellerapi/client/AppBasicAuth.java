@@ -2,17 +2,16 @@ package com.blibli.oss.sellerapi.client;
 
 import com.blibli.oss.sellerapi.client.core.BlibliSellerBasicAuthClient;
 import com.blibli.oss.sellerapi.client.model.base.ApiConfig;
-import com.blibli.oss.sellerapi.client.request.order.main.OrderRegularFulfillmentV1Request;
-import com.blibli.oss.sellerapi.client.request.order.sub.CombineShippingRequest;
+import com.blibli.oss.sellerapi.client.request.order.main.OrderRegularFulfillmentV2Request;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Hello world!
- */
 public class AppBasicAuth {
+
+  private static ObjectMapper mapper = new ObjectMapper();
 
   public static void main(String[] args) {
     try {
@@ -44,13 +43,14 @@ public class AppBasicAuth {
       //no need to send: channelId, username, storeId, requestId, businessPartnerCode and merchantCode
       //they generated automatically by client codes
       Map<String, Object> params = new HashMap<String, Object>();
-      //params.put("orderNo", "40000198525");
-      //params.put("orderItemNo", "40000262429");
+      params.put("orderNo", "40000198525");
+      params.put("orderItemNo", "40000262429");
 
       //your destination address for GET request
       String urlGetRequest = "https://api-uata.gdn-app.com/v2/proxy/mta/api/businesspartner/v1/order/orderDetail";
       //invoke Get Order Detail API
       String resultGetResult = client.invokeGet(urlGetRequest, params, config);
+      JsonNode resultGetResultJSON = mapper.readTree(resultGetResult);
       System.out.println(resultGetResult);
       
       /**
@@ -63,20 +63,15 @@ public class AppBasicAuth {
       //they generated automatically by client codes
       //set to empty Map if the API doesn't need parameter url
       Map<String, Object> paramsForPost = new HashMap<String, Object>();
-      
+
       //set your request body with any object
       //but you can use client's request body in package com.gdn.mtaapi.sdk.model.request.*
-      OrderRegularFulfillmentV1Request req = new OrderRegularFulfillmentV1Request();
-      req.setType(1);
-      req.setOrderNo("40000198525");
-      req.setOrderItemNo("40000262429");
-      CombineShippingRequest combineShipping = new CombineShippingRequest();
-      combineShipping.setOrderNo("40000198522");
-      combineShipping.setOrderItemNo("40000262426");
-      req.setCombineShipping(Collections.singletonList(combineShipping));
-      
+      OrderRegularFulfillmentV2Request req = new OrderRegularFulfillmentV2Request();
+      req.setAwbNo("123456"); //your awb no
+
       //your destination address for POST request
-      String url = "https://api-uata.gdn-app.com/v2/proxy/mta/api/businesspartner/v1/order/fulfillRegular";
+      String url = "https://api-uata.gdn-app.com/v2/proxy/seller/v1/orders/regular/" +
+          resultGetResultJSON.get("value").get("packageId").asText() + "/fulfill";
       //invoke Fulfill Order API
       String result = client.invokePost(url, paramsForPost, req, config);
       System.out.println(result);

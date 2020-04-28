@@ -40,6 +40,7 @@ public class SignatureGenerator {
       params.putIfAbsent("requestId", requestId);
       params.put("businessPartnerCode", config.getBusinessPartnerCode());
       params.put("merchantCode", config.getBusinessPartnerCode());
+      params.put("storeCode", config.getBusinessPartnerCode());
     }
   }
 
@@ -82,7 +83,6 @@ public class SignatureGenerator {
     con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
     con.setRequestProperty("requestId", requestId);
     con.setRequestProperty("sessionId", requestId);
-    con.setRequestProperty("username", config.getMtaUsername());
     con.setRequestProperty("Api-Seller-Key", config.getApiSellerKey());
   }
 
@@ -174,8 +174,13 @@ public class SignatureGenerator {
 
   private String getUrlMetadata(String url) {
     try {
-      String[] urls = url.split("/mta");
-      return "/mtaapi" + urls[1];
+      String[] urls = url.split("/proxy");
+      url = urls[1];
+      if (url.contains("/mta")) {
+        return url.replaceFirst("/mta", "/mtaapi");
+      } else {
+        return "/api" + url;
+      }
     } catch (Exception e) {
       throw new IllegalArgumentException("Your API pattern is wrong " + url, e);
     }

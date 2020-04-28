@@ -27,6 +27,21 @@ public class BlibliMerchantClient {
       ApiConfig config) throws Exception {
     return invokeRequest(Constant.HTTP_POST, apiUrl, params, requestBody, config);
   }
+
+  public String invokePut(String apiUrl, Map<String, Object> params, Object requestBody,
+      ApiConfig config) throws Exception {
+    return invokeRequest(Constant.HTTP_PUT, apiUrl, params, requestBody, config);
+  }
+
+  public String invokePatch(String apiUrl, Map<String, Object> params, Object requestBody,
+      ApiConfig config) throws Exception {
+    return invokeRequest(Constant.HTTP_PATCH, apiUrl, params, requestBody, config);
+  }
+
+  public String invokeDelete(String apiUrl, Map<String, Object> params, Object requestBody,
+      ApiConfig config) throws Exception {
+    return invokeRequest(Constant.HTTP_DELETE, apiUrl, params, requestBody, config);
+  }
 	
   public String invokeRequest(String methodType, String apiUrl, Map<String, Object> params, 
       Object requestBody, ApiConfig config) throws Exception {
