@@ -61,8 +61,6 @@ public class SignatureGenerator {
     con.setRequestProperty("x-blibli-mta-date-milis", String.valueOf(date.getTime()));
     con.setRequestProperty("Content-Type", Constant.APPLICATION_JSON);
     con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
-    con.setRequestProperty("requestId", requestId);
-    con.setRequestProperty("sessionId", requestId);
     con.setRequestProperty("username", config.getMtaUsername());
   }
 
