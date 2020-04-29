@@ -61,6 +61,8 @@ public class SignatureGenerator {
     con.setRequestProperty("x-blibli-mta-date-milis", String.valueOf(date.getTime()));
     con.setRequestProperty("Content-Type", Constant.APPLICATION_JSON);
     con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
+    con.setRequestProperty("requestId", requestId);
+    con.setRequestProperty("sessionId", requestId);
     con.setRequestProperty("username", config.getMtaUsername());
   }
 
@@ -79,8 +81,6 @@ public class SignatureGenerator {
     con.setRequestProperty("Authorization", "Basic " + encodedValue);
     con.setRequestProperty("Content-Type", Constant.APPLICATION_JSON);
     con.setRequestProperty("Accept", Constant.APPLICATION_JSON);
-    con.setRequestProperty("requestId", requestId);
-    con.setRequestProperty("sessionId", requestId);
     con.setRequestProperty("Api-Seller-Key", config.getApiSellerKey());
   }
 
@@ -175,10 +175,9 @@ public class SignatureGenerator {
       String[] urls = url.split("/proxy");
       url = urls[1];
       if (url.contains("/mta")) {
-        return url.replaceFirst("/mta", "/mtaapi");
-      } else {
-        return "/seller-api/api" + url;
+        url = url.replaceFirst("/mta", "/mtaapi");
       }
+      return url;
     } catch (Exception e) {
       throw new IllegalArgumentException("Your API pattern is wrong " + url, e);
     }
