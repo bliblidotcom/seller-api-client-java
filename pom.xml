@@ -10,7 +10,7 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com:bliblidotcom/seller-api-client-java.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com:bliblidotcom/seller-api-client-java.git</developerConnection>
-		<tag>seller-api-client-ansdmfbasdmfvn</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
@@ -49,15 +49,12 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
+	<distributionManagement>
 		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 			<id>bintray-bliblidotcom-maven</id>
-			<name>bintray</name>
-			<url>https://dl.bintray.com/bliblidotcom/maven</url>
+			<name>bliblidotcom-maven</name>
+			<url>https://api.bintray.com/maven/bliblidotcom/maven/seller-api-client-java/;publish=1</url>
 		</repository>
-	</repositories>
+	</distributionManagement>
 
 </project>
