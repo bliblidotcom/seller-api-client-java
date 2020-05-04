@@ -11,9 +11,15 @@ cache:
     - $HOME/.m2
 
 deploy:
-  provider: script
-  script: .travis/release.sh
-  skip_cleanup: true
-  on:
-    tags: true
-    jdk: openjdk8
+  - provider: script
+    script: chmod +x .travis/release.sh
+    skip_cleanup: true
+    on:
+      tags: true
+      jdk: openjdk8
+  - provider: script
+    script: .travis/release.sh
+    skip_cleanup: true
+    on:
+      tags: true
+      jdk: openjdk8
