@@ -4,10 +4,12 @@ import com.blibli.oss.sellerapi.client.core.BlibliMerchantClient;
 import com.blibli.oss.sellerapi.client.model.base.ApiConfig;
 import com.blibli.oss.sellerapi.client.model.base.TokenRefresh;
 import com.blibli.oss.sellerapi.client.model.base.TokenRequest;
-import com.blibli.oss.sellerapi.client.request.order.main.OrderRegularFulfillmentV2Request;
+import com.blibli.oss.sellerapi.client.request.order.main.OrderRegularFulfillmentV1Request;
+import com.blibli.oss.sellerapi.client.request.order.sub.CombineShippingRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +91,6 @@ public class App {
       String urlGetRequest = "https://api-uata.gdn-app.com/v2/proxy/mta/api/businesspartner/v1/order/orderDetail";
       //invoke Get Order Detail API
       String resultGetResult = client.invokeGet(urlGetRequest, params, config);
-      JsonNode resultGetResultJSON = mapper.readTree(resultGetResult);
       System.out.println(resultGetResult);
       
       /**
@@ -105,12 +106,18 @@ public class App {
       
       //set your request body with any object
       //but you can use client's request body in package com.gdn.mtaapi.sdk.model.request.*
-      OrderRegularFulfillmentV2Request req = new OrderRegularFulfillmentV2Request();
-      req.setAwbNo("123456"); //your awb no
-      
+      OrderRegularFulfillmentV1Request req = new OrderRegularFulfillmentV1Request();
+      req.setType(1);
+      req.setOrderNo("25100081147");
+      req.setOrderItemNo("25000246494");
+      req.setAwbNo("123456");
+      CombineShippingRequest combineShipping = new CombineShippingRequest();
+      combineShipping.setOrderNo("25100081147");
+      combineShipping.setOrderItemNo("25000246494");
+      req.setCombineShipping(Collections.singletonList(combineShipping));
+
       //your destination address for POST request
-      String url = "https://api-uata.gdn-app.com/v2/proxy/seller/v1/orders/regular/" + 
-          resultGetResultJSON.get("value").get("packageId").asText() + "/fulfill";
+      String url = "https://api-uata.gdn-app.com/v2/proxy/mta/api/businesspartner/v1/order/fulfillRegular";
       //invoke Fulfill Order API
       String result = client.invokePost(url, paramsForPost, req, config);
       System.out.println(result);
