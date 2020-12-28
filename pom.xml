@@ -3,7 +3,7 @@
 
 	<groupId>com.blibli.oss.sellerapi.client</groupId>
 	<artifactId>seller-api-client</artifactId>
-	<version>1.2.0-1-SNAPSHOT</version>
+	<version>1.3.0-2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>seller-api-client</name>

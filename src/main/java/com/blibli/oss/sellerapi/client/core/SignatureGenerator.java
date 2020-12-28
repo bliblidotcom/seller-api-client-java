@@ -5,7 +5,6 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -126,7 +125,7 @@ public class SignatureGenerator {
   }
 
   private String generateRawSignature(Date date, String methodType, String url, Object body) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zz YYYY",
+    SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zz yyyy",
         Locale.ENGLISH);
     dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Jakarta"));
 
