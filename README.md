@@ -10,7 +10,7 @@ Please feel free to relay your comments, suggestions or corrections through pull
 > You can get final JAR to import into your Java project by download it from urls below.    
 > [Release note](https://github.com/bliblidotcom/seller-api-client-java/releases)
 
-- v1.3.0-1 : https://github.com/bliblidotcom/seller-api-client-java/releases/tag/1.3.0-1
+- v1.3.0-2 : https://github.com/bliblidotcom/seller-api-client-java/releases/tag/1.3.0-2
 - v1.2.0-3 : https://github.com/bliblidotcom/seller-api-client-java/releases/tag/1.2.0-3
 - v1.1.0-1 : https://github.com/bliblidotcom/seller-api-client-java/releases/tag/1.1.0-1
 
@@ -29,7 +29,7 @@ Please feel free to relay your comments, suggestions or corrections through pull
 
 <!-- Set seller api client version -->
 <properties>
-    <seller-api-client.version>1.2.0-3</seller-api-client.version>
+    <seller-api-client.version>1.3.0-2</seller-api-client.version>
 </properties>
 
 <!-- add blibli bintray repository --> 
