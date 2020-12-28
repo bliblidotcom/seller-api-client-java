@@ -28,7 +28,7 @@ public class AppBasicAuth {
       ApiConfig config = new ApiConfig();
       config.setApiClientId("mta-api-clientsdk-cc80f"); // your api client id
       config.setApiClientKey("mta-api-ySvFBOwPHTTBhccx89y2QxORSyFEesT55H2ws95fbPs8fsNV9y"); // your api client key
-      config.setApiSellerKey("495930D13E51161331FB6423B048FB759B39E1573F90673F94558D727C04E917"); // your api seller key
+      config.setApiSellerKey("A41E26889F09320010A3C65620627EEB5C8424E95ACD2F2FC39D00CA609B0464"); // your api seller key
       config.setSignatureKey("secret"); // put your secret key here to activate signature flow
       config.setBusinessPartnerCode("SDC-60001"); //your business partner code/merchant code
       config.setPlatformName("My Company Name"); //your company/platform name
