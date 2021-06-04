@@ -31,18 +31,6 @@ Please feel free to relay your comments, suggestions or corrections through pull
 <properties>
     <seller-api-client.version>1.3.0-2</seller-api-client.version>
 </properties>
-
-<!-- add blibli bintray repository --> 
-<repositories>
-    <repository>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>bintray-bliblidotcom-maven</id>
-      <name>bintray</name>
-      <url>https://dl.bintray.com/bliblidotcom/maven</url>
-    </repository>
-</repositories>
 ```
 
 ##### Option 3 - Copy Client SDK Codes Into Your Java Project
