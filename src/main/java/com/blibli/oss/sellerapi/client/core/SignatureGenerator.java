@@ -67,7 +67,7 @@ public class SignatureGenerator {
   }
 
   public void setMandatoryHeaderBasicAuth(String apiUrl, String requestId, HttpURLConnection con,
-      String methodType, ApiConfig config, Object requestBody) {
+      String methodType, ApiConfig config, Object requestBody) throws ProtocolException {
     if (config.getSignatureKey() != null) {
       Date date = new Date();
       String rawSignature = this.generateRawSignature(date, methodType, apiUrl, requestBody);
@@ -76,6 +76,10 @@ public class SignatureGenerator {
       con.setRequestProperty("Signature", signature);
       con.setRequestProperty("Signature-Time", String.valueOf(date.getTime()));
     }
+
+    con.setRequestMethod(methodType);
+    con.setConnectTimeout(config.getTimeoutMs());
+    con.setReadTimeout(config.getTimeoutMs());
 
     String encodedValue = generateBasicAuthValue(config.getApiClientId(), config.getApiClientKey());
     con.setRequestProperty("Authorization", "Basic " + encodedValue);
