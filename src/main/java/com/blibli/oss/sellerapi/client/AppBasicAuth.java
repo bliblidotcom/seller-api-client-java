@@ -27,9 +27,9 @@ public class AppBasicAuth {
       //set this as global function of your framework, you need to pass this object for every request
       ApiConfig config = new ApiConfig();
       config.setApiClientId("mta-api-clientsdk-cc80f"); // your api client id
-      config.setApiClientKey("mta-api-ySvFBOwPHTTBhccx89y2QxORSyFEesT55H2ws95fbPs8fsNV9y"); // your api client key
-      config.setApiSellerKey("A41E26889F09320010A3C65620627EEB5C8424E95ACD2F2FC39D00CA609B0464"); // your api seller key
-      config.setSignatureKey("secret"); // put your secret key here to activate signature flow
+      config.setApiClientKey("mta-api-GUnrIlso6vPpbpn3ZyWLUwILCq6OxpAVcHj4hqeeppOVdNNVKZ"); // your api client key
+      config.setApiSellerKey("BFF3899A8A23C12D5AB0596450722B9F401DC058A06DE69E7BA9C4174DBD795E"); // your api seller key
+      config.setSignatureKey("12345678"); // put your secret key here to activate signature flow
       config.setBusinessPartnerCode("SDC-60001"); //your business partner code/merchant code
       config.setPlatformName("My Company Name"); //your company/platform name
       config.setTimeoutMs(15000); //your custom timeout in millisecond
@@ -52,7 +52,7 @@ public class AppBasicAuth {
       String resultGetResult = client.invokeGet(urlGetRequest, params, config);
       JsonNode resultGetResultJSON = mapper.readTree(resultGetResult);
       System.out.println(resultGetResult);
-      
+
       /**
        * #################################################################
        * ######                 POST REQUEST SAMPLE                 ######
